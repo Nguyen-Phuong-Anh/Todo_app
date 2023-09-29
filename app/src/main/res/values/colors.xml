@@ -2,10 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-<<<<<<< HEAD
-=======
     <color name="colorPrimaryDark">@android:color/holo_green_dark</color>
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorAccent">#000000</color>
->>>>>>> 5cc4397 (Initial commit)
+
 </resources>
