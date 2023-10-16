@@ -16,16 +16,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todo_app.Adapter.ToDoAdapter;
 
-//import net.penguincoders.doit.Adapters.ToDoAdapter;
 class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
-
+//implementations for swipe gestures
     private ToDoAdapter adapter;
 
     public RecyclerItemTouchHelper(ToDoAdapter adapter) {
         super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        //  specifies swipe directions: either left or right.
         this.adapter = adapter;
     }
-
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -34,8 +33,8 @@ class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
 
     @Override
     public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
-        final int position = viewHolder.getAdapterPosition();
-        if (direction == ItemTouchHelper.LEFT) {
+        final int position = viewHolder.getAdapterPosition(); //vi tri phan tu
+        if (direction == ItemTouchHelper.LEFT) { //if swipe the task left
             AlertDialog.Builder builder = new AlertDialog.Builder(adapter.getContext());
             builder.setTitle("Delete Task");
             builder.setMessage("Are you sure you want to delete this Task?");
@@ -51,6 +50,7 @@ class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
                 public void onClick(DialogInterface dialog, int which) {
                     adapter.notifyItemChanged(viewHolder.getAdapterPosition());
                 }
+//                if user deny delete, then refreshes the UI to undo the swipe action visually
             });
             AlertDialog dialog = builder.create();
             dialog.show();
@@ -61,15 +61,16 @@ class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
 
     @Override
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+        //drawing the background and icon when the item is swiped.
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
 
         Drawable icon;
         ColorDrawable background;
 
-        View itemView = viewHolder.itemView;
+        View itemView = viewHolder.itemView; // view of the item being swiped
         int backgroundCornerOffset = 20;
 
-        if (dX > 0) {
+        if (dX > 0) { //swipe to right
             icon = ContextCompat.getDrawable(adapter.getContext(), R.drawable.ic_baseline_edit);
             background = new ColorDrawable(ContextCompat.getColor(adapter.getContext(), R.color.colorPrimaryDark));
         } else {
@@ -85,9 +86,9 @@ class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
         if (dX > 0) { // Swiping to the right
             int iconLeft = itemView.getLeft() + iconMargin;
             int iconRight = itemView.getLeft() + iconMargin + icon.getIntrinsicWidth();
-            icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+            icon.setBounds(iconLeft, iconTop, iconRight, iconBottom); //positioning the icon
 
-            background.setBounds(itemView.getLeft(), itemView.getTop(),
+            background.setBounds(itemView.getLeft(), itemView.getTop(), //position the background
                     itemView.getLeft() + ((int) dX) + backgroundCornerOffset, itemView.getBottom());
         } else if (dX < 0) { // Swiping to the left
             int iconLeft = itemView.getRight() - iconMargin - icon.getIntrinsicWidth();

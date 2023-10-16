@@ -1,9 +1,10 @@
 package com.example.todo_app.Model;
-
+//represent a todolist item ~ an object
 public class ToDoModel {
-    private int id, status;
-    private String task;
+    private int id, status; //task: xong va chua xong
+    private String task; //noi dung task
 
+    //getter & setter
     public int getId() {
         return id;
     }

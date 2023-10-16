@@ -5,7 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+<!--
+RelativeLayout: sắp xếp các View con theo vị trí view cha
+-->
 
+    <!--
+các thành phần giao diện được xây dựng từ lớp cơ sở View
+VD: Button, TextView, CheckBox -> View
+-->
+
+<!--
+ViewGroup: là một View có khả năng chứa các View khác bên trong
+VD: ConstraintLayout, RelativeLayout, LinearLayout
+-->
+
+<!--
+Layout: là các View được thiết kế với mục đích chứa các View con
+và điều khiển, sắp xếp vị trí các View con đó trên màn hình
+-->
 
     <TextView
         android:id="@+id/tasksText"
@@ -18,7 +35,9 @@
         android:layout_marginBottom="16dp"
         android:textSize="32sp"
         />
-
+<!--
+RecyclerView: dùng để hiển thị dữ liệu dạng mảng từ một nguồn cấp gọi là Adapter
+-->
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -39,6 +58,5 @@
         android:layout_margin="32dp"
         android:backgroundTint="@android:color/holo_orange_dark"
         />
-
 
 </RelativeLayout>

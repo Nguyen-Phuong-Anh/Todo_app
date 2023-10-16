@@ -21,14 +21,11 @@ import com.example.todo_app.Model.ToDoModel;
 import com.example.todo_app.Utils.DatabaseHandler;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-//import net.penguincoders.doit.Adapters.ToDoAdapter;
-//import net.penguincoders.doit.Model.ToDoModel;
-//import net.penguincoders.doit.Utils.DatabaseHandler;
-
 import java.util.Objects;
 
 public class AddNewTask extends BottomSheetDialogFragment {
-
+//BottomSheetDialogFragment -> dialog appear in the bottom of the app
+//    this bottom can be used to add task or it can be used to update task
     public static final String TAG = "ActionBottomDialog";
     private EditText newTaskText;
     private Button newTaskSaveButton;
@@ -62,29 +59,30 @@ public class AddNewTask extends BottomSheetDialogFragment {
         newTaskText = getView().findViewById(R.id.newTaskText);
         newTaskSaveButton = getView().findViewById(R.id.newTaskButton);
 
-        boolean isUpdate = false;
+        boolean isUpdate = false; //mac dinh them task
 
-        final Bundle bundle = getArguments();
-        if(bundle != null){
+//         checks if the bottom sheet is opened for editing an existing task.
+        final Bundle bundle = getArguments(); //Retrieves the arguments passed to the fragment.
+        if(bundle != null){ //co doi so - thuc hien hanh dong sua task
             isUpdate = true;
-            String task = bundle.getString("task");
+            String task = bundle.getString("task"); //Retrieves the task text from the arguments.
             newTaskText.setText(task);
             assert task != null;
-            if(task.length()>0)
+            if(task.length()>0) //kiem tra chuoi
                 newTaskSaveButton.setTextColor(ContextCompat.getColor((getContext()), R.color.colorPrimaryDark));
         }
 
         db = new DatabaseHandler(getActivity());
         db.openDatabase();
 
-        newTaskText.addTextChangedListener(new TextWatcher() {
+        newTaskText.addTextChangedListener(new TextWatcher() { //event
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.toString().equals("")){
+                if(s.toString().equals("")){ //if there is no text
                     newTaskSaveButton.setEnabled(false);
                     newTaskSaveButton.setTextColor(Color.GRAY);
                 }
@@ -100,20 +98,20 @@ public class AddNewTask extends BottomSheetDialogFragment {
         });
 
         final boolean finalIsUpdate = isUpdate;
-        newTaskSaveButton.setOnClickListener(new View.OnClickListener() {
+        newTaskSaveButton.setOnClickListener(new View.OnClickListener() { //su kien khi an nut luu
             @Override
             public void onClick(View v) {
                 String text = newTaskText.getText().toString();
-                if(finalIsUpdate){
+                if(finalIsUpdate){ //check if this is update task or add new task
                     db.updateTask(bundle.getInt("id"), text);
                 }
                 else {
                     ToDoModel task = new ToDoModel();
                     task.setTask(text);
                     task.setStatus(0);
-                    db.insertTask(task);
+                    db.insertTask(task); ///add task
                 }
-                dismiss();
+                dismiss(); //
             }
         });
     }
@@ -121,7 +119,8 @@ public class AddNewTask extends BottomSheetDialogFragment {
     @Override
     public void onDismiss(@NonNull DialogInterface dialog){
         Activity activity = getActivity();
-        if(activity instanceof DialogCloseListener)
-            ((DialogCloseListener)activity).handleDialogClose(dialog);
+        if(activity instanceof DialogCloseListener) //If the parent activity implements the DialogCloseListener interface
+            ((DialogCloseListener)activity).handleDialogClose(dialog); //close the bottom dialog
+        //  inform the parent activity that the dialog has been closed.
     }
 }

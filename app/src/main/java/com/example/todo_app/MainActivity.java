@@ -1,28 +1,20 @@
 package com.example.todo_app;
 
 
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 import com.example.todo_app.Adapter.ToDoAdapter;
 import com.example.todo_app.Model.ToDoModel;
 import com.example.todo_app.Utils.DatabaseHandler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-//
-//import net.penguincoders.doit.Adapters.ToDoAdapter;
-//import net.penguincoders.doit.Model.ToDoModel;
-//import net.penguincoders.doit.Utils.DatabaseHandler;
+
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,21 +32,22 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
     private ToDoAdapter tasksAdapter;
     private FloatingActionButton fab;
 
-    private List<ToDoModel> taskList;
+    private List<ToDoModel> taskList; //collection of task objs
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) { //call when activity has been created
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Objects.requireNonNull(getSupportActionBar()).hide();
+        setContentView(R.layout.activity_main); //load UI
 
         db = new DatabaseHandler(this);
         db.openDatabase();
 
+            //set up recycler view + setAdapter
         tasksRecyclerView = findViewById(R.id.tasksRecyclerView);
         tasksRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        tasksAdapter = new ToDoAdapter(db,MainActivity.this);
-        tasksRecyclerView.setAdapter(tasksAdapter);
+        //setLayoutManager: quy định vị trí các phần tử trong RecyclerView hiện thị
+        tasksAdapter = new ToDoAdapter(db,MainActivity.this); //tao adapter
+        tasksRecyclerView.setAdapter(tasksAdapter); 
 
         ItemTouchHelper itemTouchHelper = new
                 ItemTouchHelper(new RecyclerItemTouchHelper(tasksAdapter));
@@ -67,19 +60,21 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
 
         tasksAdapter.setTasks(taskList);
 
+//        add new task
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddNewTask.newInstance().show(getSupportFragmentManager(), AddNewTask.TAG);
+                //show the dialog fragment
             }
-        });
+        }); //event when click on the float button
     }
 
     @Override
-    public void handleDialogClose(DialogInterface dialog){
+    public void handleDialogClose(DialogInterface dialog){ //if the dialog in the bottom is closed, then...
         taskList = db.getAllTasks();
-        Collections.reverse(taskList);
+        Collections.reverse(taskList); //
         tasksAdapter.setTasks(taskList);
-        tasksAdapter.notifyDataSetChanged();
+        tasksAdapter.notifyDataSetChanged(); //thông báo cho RecyclerView rằng dữ liệu thay đổi
     }
 }
